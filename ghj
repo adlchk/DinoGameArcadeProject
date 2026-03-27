@@ -1,0 +1,53 @@
+import requests
+
+BASE_URL = "http://127.0.0.1:5000/api/v2/users"
+
+
+def show(response):
+    print(f"URL: {response.url}")
+    print(f"Status code: {response.status_code}")
+    content_type = response.headers.get("Content-Type", "")
+    print(f"Content-Type: {content_type}")
+    if "application/json" in content_type:
+        try:
+            print("JSON response:", response.json())
+        except Exception as e:
+            print("Error decoding JSON:", e)
+            print(response.text)
+    else:
+        print("Non-JSON response (HTML or plain text):")
+        print(response.text)
+    print("-" * 50)
+
+
+r = requests.get(BASE_URL)
+show(r)
+
+r = requests.post(
+    BASE_URL,
+    json={
+        "surname": "Ivanov",
+        "name": "Ivan",
+        "age": 20,
+        "position": "engineer",
+        "speciality": "builder",
+        "address": "module_1",
+        "email": "ivan@test.com",
+    },
+)
+show(r)
+
+r = requests.post(BASE_URL, json={"surname": "Petrov"})
+show(r)
+
+r = requests.get(f"{BASE_URL}/1")
+show(r)
+
+r = requests.get(f"{BASE_URL}/999")
+show(r)
+
+r = requests.delete(f"{BASE_URL}/1")
+show(r)
+
+r = requests.delete(f"{BASE_URL}/999")
+show(r)
